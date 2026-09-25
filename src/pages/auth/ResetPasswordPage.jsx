@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { authApi } from "../../api/auth";
-import { FiCode, FiKey, FiLock, FiEye, FiEyeOff, FiCheckCircle } from "react-icons/fi";
+import { FiCode, FiMail, FiLock, FiEye, FiEyeOff, FiCheckCircle } from "react-icons/fi";
 import toast from "react-hot-toast";
 
 export default function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
-  const [token, setToken] = useState(searchParams.get("token") || "");
+  const [email, setEmail] = useState(searchParams.get("email") || "");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +17,7 @@ export default function ResetPasswordPage() {
 
   const validate = () => {
     const errs = {};
-    if (!token.trim()) errs.token = "Reset token is required";
+    if (!email.trim()) errs.email = "Email is required";
     if (!newPassword) errs.newPassword = "New password is required";
     else if (newPassword.length < 6) errs.newPassword = "Password must be at least 6 characters";
     if (newPassword !== confirmPassword) errs.confirmPassword = "Passwords do not match";
@@ -30,12 +30,12 @@ export default function ResetPasswordPage() {
     if (!validate()) return;
     setLoading(true);
     try {
-      await authApi.resetPassword(token.trim(), newPassword);
+      await authApi.resetPassword(email.trim(), newPassword);
       setSuccess(true);
       toast.success("Password reset successfully!");
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
-      toast.error(err.response?.data?.detail || "Invalid or expired token.");
+      toast.error(err.response?.data?.detail || "Failed to reset password.");
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export default function ResetPasswordPage() {
             </div>
           </Link>
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Reset your password</h2>
-          <p className="text-sm text-slate-500 mt-1">Enter your reset token and choose a new password.</p>
+          <p className="text-sm text-slate-500 mt-1">Enter your account email and choose a new password.</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200/80 p-8 shadow-xs">
@@ -67,28 +67,24 @@ export default function ResetPasswordPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">Reset Token</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Email Address</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <FiKey className="text-base" />
-                  </div>
+                  <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400" />
                   <input
-                    type="text"
-                    value={token}
-                    onChange={(e) => { setToken(e.target.value); if (errors.token) setErrors({ ...errors, token: null }); }}
-                    placeholder="Paste token received"
-                    className={`input input-bordered w-full pl-10 text-sm font-mono ${errors.token ? "input-error" : ""}`}
+                    type="email"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); if (errors.email) setErrors({ ...errors, email: null }); }}
+                    placeholder="name@example.com"
+                    className={`input input-bordered w-full pl-10 text-sm ${errors.email ? "input-error" : ""}`}
                   />
                 </div>
-                {errors.token && <p className="text-xs text-red-600 mt-1 font-medium">{errors.token}</p>}
+                {errors.email && <p className="text-xs text-red-600 mt-1 font-medium">{errors.email}</p>}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1.5">New Password</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <FiLock className="text-base" />
-                  </div>
+                  <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400" />
                   <input
                     type={showPassword ? "text" : "password"}
                     value={newPassword}
@@ -106,9 +102,7 @@ export default function ResetPasswordPage() {
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1.5">Confirm New Password</label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <FiLock className="text-base" />
-                  </div>
+                  <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400" />
                   <input
                     type={showPassword ? "text" : "password"}
                     value={confirmPassword}

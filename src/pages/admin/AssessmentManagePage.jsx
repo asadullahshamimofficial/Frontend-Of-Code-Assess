@@ -67,7 +67,7 @@ export default function AssessmentManagePage() {
 
       <div className="bg-white p-3 rounded-xl border border-slate-200 flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1">
-          <FiSearch className="absolute left-3 top-3 text-slate-400" />
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400" />
           <input
             type="text"
             value={search}

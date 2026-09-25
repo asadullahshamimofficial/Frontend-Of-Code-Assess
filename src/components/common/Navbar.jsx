@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { useAuth } from "../../contexts/AuthContext";
-import { FiCode, FiLogOut, FiUser, FiAward, FiShield, FiMenu, FiX } from "react-icons/fi";
+import { FiCode, FiLogOut, FiMenu, FiX } from "react-icons/fi";
 
 export default function Navbar() {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
@@ -14,10 +14,7 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  const linkClass = (path) =>
-    `px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-      location.pathname === path ? "text-primary bg-primary/10 font-semibold" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-    }`;
+  const linkClass = (path) => `px-3 py-2 rounded-lg text-sm font-medium transition-colors ${location.pathname === path ? "text-primary bg-primary/10 font-semibold" : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"}`;
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
